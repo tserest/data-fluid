@@ -1,0 +1,5 @@
+# Ignored maps/files
+node_modules/
+.eslintrc.js
+.editorconfig
+.eslintignore

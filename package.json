@@ -1,0 +1,31 @@
+{
+  "name": "data-fluid",
+  "version": "1.0.0",
+  "description": "Custom DataLayer library",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "npx babel src --watch --out-file lib/main-compiled.js --source-maps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\"https://github.com/tserest/data-fluid\""
+  },
+  "bugs": {
+    "url": "https://github.com/tserest/turbo-umbrella/issues"
+  },
+  "browserList": "> 0.25%, not dead",
+  "author": "Johan Meijer",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "babel-eslint": "^10.0.1",
+    "babel-preset-minify": "^0.5.0",
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4"
+  }
+}
