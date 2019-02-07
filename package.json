@@ -4,7 +4,7 @@
   "description": "Custom DataLayer library",
   "main": "src/main.js",
   "scripts": {
-    "start": "npx babel src --watch --out-file lib/main-compiled.js --source-maps"
+    "start": "npx babel src --watch --out-file lib/main-compiled.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +27,6 @@
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4"
-  }
+  },
+  "dependencies": {}
 }
