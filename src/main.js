@@ -1,22 +1,25 @@
 (function constructDataLayers() {
-  function DataLayerProtoOne() {
+  function DataFluid() {
     (function createUtilities(target) {
       const lib = target;
 
-      lib.merge = function deepmerge(...args) {
+      lib.mergeObject = function mergeObject(...args) {
         const result = {};
-        args.forEach((_obj) => {
-          Object.keys(_obj).forEach((key) => {
-            if (Object.prototype.hasOwnProperty.call(_obj, key)) {
-              if (Object.prototype.toString.call(_obj[key]) === '[object Object]' && !lib.isEmpty(_obj[key])) {
-                result[key] = lib.merge(result[key], _obj[key]);
+
+        args.forEach((obj) => {
+          Object.keys(obj).forEach((prop) => {
+            if (typeof obj[prop] === 'object') {
+              if (Array.isArray(obj[prop])) {
+                result[prop] = Array.prototype.concat.call(result[prop] || [], obj[prop]);
               } else {
-                result[key] = _obj[key];
-                lib.trigger(key, result[key]);
+                result[prop] = mergeObject(result[prop] || {}, obj[prop]);
               }
+            } else {
+              result[prop] = obj[prop];
             }
           });
         });
+
         return result;
       };
 
@@ -31,8 +34,6 @@
         });
         return cookieObj;
       };
-
-      lib.isEmpty = _obj => Object.entries(_obj).length === 0 && _obj.constructor === Object;
     }(this));
 
     (function createEventModule(target) {
@@ -42,9 +43,15 @@
 
       lib.events = [];
 
-      lib.on = function on(event, callback) {
+      lib.listen = function on(event, callback) {
         listeners[event] = listeners[event] || [];
         listeners[event].push(callback);
+
+        // Check for Events of this type that already happened
+        const eventsInThePast = lib.events.filter(e => Object.keys(e)[0] === event);
+
+        // Trigger the callback for Each of those events with the data at that time.
+        eventsInThePast.forEach(e => lib.trigger(event, e[event]));
       };
 
       lib.off = function off(event, callback) {
@@ -53,7 +60,7 @@
         ));
       };
 
-      lib.once = function once(event, callback) {
+      lib.listenOnce = function once(event, callback) {
         onceListeners[event] = onceListeners[event] || [];
         onceListeners[event].push(callback);
       };
@@ -62,22 +69,16 @@
         const dataObj = {};
         dataObj[event] = data;
 
-        let fired = false;
-
         if (listeners[event]) {
           listeners[event].forEach(listener => listener(dataObj));
-          fired = true;
         }
 
         if (onceListeners[event]) {
           onceListeners[event].forEach(listener => listener(dataObj));
           onceListeners[event] = [];
-          fired = true;
         }
 
-        if (fired) {
-          this.events.push(dataObj);
-        }
+        this.events.push(dataObj);
       };
     }(this));
 
@@ -107,33 +108,9 @@
 
       lib.set = function set(data) {
         const prevData = lib.data;
-        lib.data = lib.merge(prevData, data);
+        lib.data = lib.mergeObject(prevData, data);
       };
     }(this));
   }
-
-  function DataLayerProtoTwo() {
-    this.data = {
-      page: {},
-      user: {},
-      cookies: {},
-    };
-    this.events = [];
-
-    function handleEvent(newElementInArray) {
-      console.log('Do Tagmanager things with following event', newElementInArray);
-    }
-
-    Object.defineProperty(this.events, 'push', {
-      value: function pushWithBenefits(...args) {
-        args.forEach((arg) => {
-          handleEvent(this[this.length] = arg);
-        });
-        return this.length;
-      },
-    });
-  }
-
-  window.dlProtoOne = new DataLayerProtoOne();
-  window.dlProtoTwo = new DataLayerProtoTwo();
+  window.DataFluid = new DataFluid();
 }());

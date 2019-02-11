@@ -4,7 +4,7 @@
   "description": "Custom DataLayer library",
   "main": "src/main.js",
   "scripts": {
-    "start": "npx babel src --watch --out-file lib/main-compiled.js"
+    "start": "npx babel --watch src --no-comments --out-file lib/main-compiled.js"
   },
   "repository": {
     "type": "git",
