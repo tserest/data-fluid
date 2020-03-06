@@ -72,7 +72,7 @@ Object.defineProperties(DataFluid.prototype, {
       if (obj === null) {
         return String(obj);
       }
-      const typeRegex = /\[object (Boolean|Number|String|Function|Array|Date|RegExp)\]/;
+      const typeRegex = /\[object (Boolean|Null|Undefined|Math|Error|Number|String|Set|Function|Array|Date|RegExp)\]/;
       const match = typeRegex.exec(Object.prototype.toString.call(Object(obj)));
       if (match) {
         return match[1].toLowerCase();
@@ -107,6 +107,10 @@ Object.defineProperties(DataFluid.prototype, {
       if (this.getType(obj) === 'array') {
         return obj.length === 0;
       }
+
+      if (this.getType(obj) === 'string') {
+        return obj.length === 0;
+      }
       return false;
     },
   },
@@ -120,15 +124,15 @@ Object.defineProperties(DataFluid.prototype, {
   },
 
   mergeObject: {
-    value: function mergeObject(original, addition, scope) {
+    value: function mergeObject(original, addition, ancestry) {
       const result = original;
       Object.keys(addition).forEach((prop) => {
-        const level = scope ? `${scope}.${prop}` : prop;
+        const level = ancestry ? `${ancestry}.${prop}` : prop;
         const typeCheck = this.getType(result[prop]) === this.getType(addition[prop]);
 
         if (this.isData(addition[prop])) {
           // Handle Objects
-          if (this.isPlainObject(addition[prop])) {
+          if (this.getType(addition[prop]) === 'object') {
             const archiveOriginal = this.clone(result[prop]);
             const origin = typeCheck ? result[prop] : {};
             result[prop] = this.mergeObject(origin, addition[prop], level);
@@ -145,7 +149,7 @@ Object.defineProperties(DataFluid.prototype, {
             const change = result[prop] !== addition[prop];
             result[prop] = addition[prop];
             if (change) {
-              this.trigger(level, addition[prop]);
+              this.trigger(level, addition);
             }
           }
         }
