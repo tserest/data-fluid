@@ -17,7 +17,6 @@
   "author": "Johan Meijer",
   "license": "ISC",
   "devDependencies": {
-<<<<<<< HEAD
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
@@ -28,18 +27,6 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.18.3"
-=======
-    "@babel/cli": "^7.6.2",
-    "@babel/core": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
-    "babel-eslint": "^10.0.3",
-    "babel-preset-minify": "^0.5.1",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb": "^17.1.1",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.3"
->>>>>>> c5b0dd12a7afd495b168a76c13d25f0774073c11
   },
   "dependencies": {}
 }
