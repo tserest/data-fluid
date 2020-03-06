@@ -72,7 +72,7 @@ Object.defineProperties(DataFluid.prototype, {
       if (obj === null) {
         return String(obj);
       }
-      const typeRegex = /\[object (Boolean|Null|Undefined|Math|Error|Number|String|Set|Function|Array|Date|RegExp)\]/;
+      const typeRegex = /\[object (Boolean|Symbol|Null|Undefined|Math|Error|Number|String|Set|Function|Array|Date|RegExp)\]/;
       const match = typeRegex.exec(Object.prototype.toString.call(Object(obj)));
       if (match) {
         return match[1].toLowerCase();
