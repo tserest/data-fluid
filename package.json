@@ -4,7 +4,8 @@
   "description": "Event driven datalayer prototype",
   "main": "src/main.js",
   "scripts": {
-    "start": "npx babel --watch src --no-comments --out-file lib/main-min.js"
+    "test": "tsc --noEmit",
+    "build": "node esbuild.js"
   },
   "repository": {
     "type": "git",
@@ -13,9 +14,8 @@
   "bugs": {
     "url": "https://github.com/JJMeijer/data-fluid/issues"
   },
-  "browserList": "> 0.25%, not dead",
-  "author": "Johan Meijer",
-  "license": "ISC",
+  "author": "JJMeijer",
+  "license": "MIT",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
@@ -25,5 +25,7 @@
     "prettier": "^2.2.1",
     "typescript": "^4.1.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "esbuild": "^0.8.16"
+  }
 }
