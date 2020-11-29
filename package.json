@@ -1,32 +1,30 @@
 {
   "name": "data-fluid",
   "version": "1.0.0",
-  "description": "Custom DataLayer library",
+  "description": "Event driven datalayer prototype",
   "main": "src/main.js",
   "scripts": {
-    "start": "npx babel --watch src --no-comments --out-file lib/main-min.js"
+    "test": "eslint src && tsc --noEmit",
+    "build": "node esbuild.js"
   },
   "repository": {
     "type": "git",
-    "url": "\"https://github.com/tserest/data-fluid\""
+    "url": "\"https://github.com/JJMeijer/data-fluid\""
   },
   "bugs": {
-    "url": "https://github.com/tserest/turbo-umbrella/issues"
+    "url": "https://github.com/JJMeijer/data-fluid/issues"
   },
-  "browserList": "> 0.25%, not dead",
-  "author": "Johan Meijer",
-  "license": "ISC",
+  "author": "JJMeijer",
+  "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
-    "babel-eslint": "^10.1.0",
-    "babel-preset-minify": "^0.5.1",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb": "^17.1.1",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.18.3"
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
+    "esbuild": "^0.8.16",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.2"
   },
   "dependencies": {}
 }
