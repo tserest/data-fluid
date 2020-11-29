@@ -1,12 +1,14 @@
 declare global {
   interface Window {
-    fluid: FluidDatalayer;
+    DataFluid: () => FluidDatalayer;
   }
 }
 
 export interface FluidObject {
   [key: string]: unknown;
 }
+
+export type FluidArray = Array<unknown>;
 
 export type JsTypes =
   | 'boolean'
@@ -37,14 +39,31 @@ export interface FluidCallback {
   (data: FluidObject): void;
 }
 
+export interface FluidTrigger {
+  (event: string, data: FluidObject, isEvent?: boolean): void;
+}
+
+export interface FluidSet {
+  (newData: FluidObject): void;
+}
+
+export interface FluidOn {
+  (event: string, callback: FluidCallback): void;
+}
+
 export interface FluidListeners {
   [key: string]: Array<FluidCallback>;
+}
+
+export interface FluidMerge {
+  (original: FluidObject, addition: FluidObject, trigger: FluidTrigger, ancestry?: string): FluidObject;
 }
 
 export interface FluidDatalayer {
   events: Array<FluidEvent>;
   data: FluidObject;
-  set: (newData: FluidObject) => void;
-  on: (event: string, callback: FluidCallback) => void;
-  once: (event: string, callback: FluidCallback) => void;
+  set: FluidSet;
+  on: FluidOn;
+  once: FluidOn;
+  trigger: FluidTrigger;
 }

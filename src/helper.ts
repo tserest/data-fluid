@@ -1,4 +1,4 @@
-import { JsTypes, Validation, FluidObject } from './types';
+import { JsTypes, Validation, FluidObject, FluidMerge, FluidArray } from './types';
 
 const getElementType = (element: unknown): JsTypes => {
   const typeRegex = /\[object (Boolean|Symbol|Undefined|Null|Math|Error|Number|String|Set|Function|Array|Date|Regexp)\]/;
@@ -18,7 +18,7 @@ export const validateType = (validationObject: Validation): void => {
   });
 };
 
-const clone = (obj: unknown): unknown => {
+const clone = (obj: FluidObject | FluidArray): FluidObject | FluidArray => {
   return JSON.parse(JSON.stringify(obj));
 };
 
@@ -46,7 +46,7 @@ const isData = (element: unknown): boolean => {
   return !!match && !isEmpty(element);
 };
 
-export const merge = (original: FluidObject, addition: FluidObject, ancestry = ''): FluidObject => {
+export const merge: FluidMerge = (original, addition, trigger, ancestry = '') => {
   const merged = original;
   Object.keys(addition).forEach((key) => {
     const ancestryLevel = ancestry ? `${ancestry}.${key}` : key;
@@ -65,20 +65,32 @@ export const merge = (original: FluidObject, addition: FluidObject, ancestry = '
         const origin = (similarType ? originalDataElement : {}) as FluidObject;
         const originArchive = clone(origin);
 
-        merged[key] = merge(origin, additionObject, ancestryLevel);
+        merged[key] = merge(origin, additionObject, trigger, ancestryLevel);
 
         if (originArchive !== merged[key]) {
-          console.log(`Data element Changed: ${ancestryLevel}`, clone(additionObject));
+          trigger(
+            ancestryLevel,
+            {
+              [key]: clone(additionObject) as FluidObject,
+            },
+            false
+          );
         }
       }
 
       if (additionType === 'array') {
-        const additionArray = additionDataElement as Array<unknown>;
-        const origin = (similarType ? originalDataElement : []) as Array<unknown>;
+        const additionArray = additionDataElement as FluidArray;
+        const origin = (similarType ? originalDataElement : []) as FluidArray;
 
         merged[key] = Array.prototype.concat.call(origin, additionArray);
 
-        console.log(`Data element Changed: ${ancestryLevel}`, clone(additionArray));
+        trigger(
+          ancestryLevel,
+          {
+            [key]: clone(additionArray) as FluidArray,
+          },
+          false
+        );
       }
 
       if (additionType.match(/^(boolean|number|string|date)$/)) {
@@ -86,7 +98,13 @@ export const merge = (original: FluidObject, addition: FluidObject, ancestry = '
         merged[key] = additionDataElement;
 
         if (dataElementChanged) {
-          console.log(`Data element changed: ${ancestryLevel}`, additionDataElement);
+          trigger(
+            ancestryLevel,
+            {
+              [key]: additionDataElement,
+            },
+            false
+          );
         }
       }
     }

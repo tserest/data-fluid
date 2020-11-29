@@ -1,23 +1,23 @@
-import { FluidCallback, FluidDatalayer, FluidEvent, FluidListeners, FluidObject } from './types';
+import { FluidDatalayer, FluidEvent, FluidListeners, FluidObject, FluidOn, FluidSet, FluidTrigger } from './types';
 import { validateType, merge } from './helper';
 
-const DataFluid = (): FluidDatalayer => {
+window.DataFluid = (): FluidDatalayer => {
   const events: Array<FluidEvent> = [];
   let currentData: FluidObject = {};
 
-  const set = (newData: FluidObject): void => {
+  const set: FluidSet = (newData) => {
     validateType({
       object: newData,
     });
 
     const oldData = currentData;
-    currentData = merge(oldData, newData);
+    currentData = merge(oldData, newData, trigger);
   };
 
   const listeners: FluidListeners = {};
   const onceListeners: FluidListeners = {};
 
-  const trigger = (event: string, data: FluidObject): void => {
+  const trigger: FluidTrigger = (event, data, isEvent = true) => {
     validateType({
       string: event,
       object: data,
@@ -32,13 +32,15 @@ const DataFluid = (): FluidDatalayer => {
       onceListeners[event] = [];
     }
 
-    events.push({
-      event,
-      data,
-    });
+    if (isEvent) {
+      events.push({
+        event,
+        data,
+      });
+    }
   };
 
-  const on = (event: string, callback: FluidCallback): void => {
+  const on: FluidOn = (event, callback) => {
     validateType({
       string: event,
       function: callback,
@@ -51,7 +53,7 @@ const DataFluid = (): FluidDatalayer => {
     previousEvents.forEach((previousEvent) => trigger(previousEvent.event, previousEvent.data));
   };
 
-  const once = (event: string, callback: FluidCallback): void => {
+  const once: FluidOn = (event, callback) => {
     validateType({
       string: event,
       function: callback,
@@ -74,7 +76,6 @@ const DataFluid = (): FluidDatalayer => {
     set,
     on,
     once,
+    trigger,
   };
 };
-
-window.fluid = DataFluid();
